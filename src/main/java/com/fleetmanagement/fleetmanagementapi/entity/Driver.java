@@ -29,6 +29,6 @@ public class Driver {
     public int getPenaltyPoints() {
         return penaltyPoints;
     }
-    
+
 }
 
