@@ -40,6 +40,7 @@ public class Car {
         return driver;
     }
 
+    //This is assignDriver in basic analysis UML
     public void setDriver(Driver driver) {
         this.driver = driver;
     }
