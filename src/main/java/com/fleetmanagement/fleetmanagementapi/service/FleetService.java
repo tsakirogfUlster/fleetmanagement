@@ -25,7 +25,12 @@ public class FleetService {
         if (driver.isEmpty() || car.isEmpty()) {
             throw new IllegalArgumentException("Driver or Car not found");
         }
-        // Additional logic can be added here if needed
+        // Assign the driver to the car
+        Car carEntity = car.get();
+        carEntity.setDriver(driver.get());
+
+        // Save the updated car entity
+        carRepository.save(carEntity);
     }
 }
 

@@ -11,6 +11,9 @@ public class Car {
     private String licensePlate;
     private String type;
 
+    @ManyToOne
+    private Driver driver;
+
     public Car(Long id, String type, String licensePlate) {
         this.id = id;
         this.type = type;
@@ -31,5 +34,13 @@ public class Car {
 
     public String getType() {
         return type;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 }
