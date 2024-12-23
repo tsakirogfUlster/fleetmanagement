@@ -1,11 +1,14 @@
 package com.fleetmanagement.heartbeater.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fleetmanagement.heartbeater.model.Heartbeat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 
 import java.util.Random;
 
@@ -14,6 +17,16 @@ public class HeartbeatService {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
+
+//    @Autowired
+//    private RestTemplate restTemplate;
+
+    private final RestTemplate restTemplate;
+
+    public HeartbeatService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
 
     private final Random random = new Random();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -39,6 +52,14 @@ public class HeartbeatService {
     }
 
     private Heartbeat generateSimulatedHeartbeat() {
+
+        //First we need to check for the first car in the api, with an assigned driver
+        String[] carAndDriverIds = fetchCarAndDriverIds();
+
+        if (carAndDriverIds == null) {
+            throw new IllegalStateException("No car with an assigned driver found.");
+        }
+
         // Update speed with some random fluctuation (simulate acceleration/deceleration)
         speed += (random.nextDouble() - 0.5) * 10; // Random change of ±5 km/h
         speed = Math.max(0, Math.min(speed, 120)); // Clamp speed between 0 and 120 km/h
@@ -59,11 +80,40 @@ public class HeartbeatService {
 
         // Create a new heartbeat object
         Heartbeat heartbeat = new Heartbeat();
-        heartbeat.setcarID("1");
-        heartbeat.setDriverId("1");
+        heartbeat.setcarID(carAndDriverIds[0]);
+        heartbeat.setDriverId(carAndDriverIds[1]);
         heartbeat.setGeoCoordinates(latitude + "," + longitude);
         heartbeat.setSpeed(speed);
 
         return heartbeat;
+    }
+
+    private String[] fetchCarAndDriverIds() {
+        final String FLEET_CARS_API = "http://localhost:8080/fleet/cars";
+
+        try {
+            // Make a GET request to fetch the cars
+            String jsonResponse = restTemplate.getForObject(FLEET_CARS_API, String.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // Parse JSON response
+            JsonNode carsNode = objectMapper.readTree(jsonResponse);
+
+            for (JsonNode carNode : carsNode) {
+                JsonNode driverNode = carNode.get("driver");
+
+                if (driverNode != null) {
+                    String carId = carNode.get("id").asText(); // Use "id" for the car ID
+                    String driverId = driverNode.get("id").asText(); // Use "id" for the driver ID
+                    return new String[]{carId, driverId};
+                }
+            }
+
+            System.out.println("No cars with assigned drivers available.");
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
