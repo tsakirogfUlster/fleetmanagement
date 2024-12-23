@@ -1,0 +1,7 @@
+com\fleetmanagement\fleetmanagementapi\controller\FleetController.class
+com\fleetmanagement\fleetmanagementapi\repository\DriverRepository.class
+com\fleetmanagement\fleetmanagementapi\entity\Driver.class
+com\fleetmanagement\fleetmanagementapi\service\FleetService.class
+com\fleetmanagement\fleetmanagementapi\entity\Car.class
+com\fleetmanagement\fleetmanagementapi\repository\CarRepository.class
+com\fleetmanagement\fleetmanagementapi\FleetmanagementapiApplication.class
