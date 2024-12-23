@@ -47,9 +47,7 @@ public class HeartbeatService {
         double speedInMetersPerSecond = speed * 1000 / 3600;
 
         // Calculate new coordinates based on speed, direction, and a 5-second interval
-        double distance = speedInMetersPerSecond * 5
-                ; // Distance covered in 5 s
-        // econds
+        double distance = speedInMetersPerSecond * 5; // Distance covered in 5 seconds
         double distanceInDegrees = distance / 111000; // Approximation: 1 degree ≈ 111 km
 
         latitude += distanceInDegrees * Math.cos(Math.toRadians(direction));
@@ -61,8 +59,8 @@ public class HeartbeatService {
 
         // Create a new heartbeat object
         Heartbeat heartbeat = new Heartbeat();
-        heartbeat.setcarID("CAR-" + random.nextInt(100));
-        heartbeat.setDriverId("DRIVER-" + random.nextInt(50));
+        heartbeat.setcarID("1");
+        heartbeat.setDriverId("1");
         heartbeat.setGeoCoordinates(latitude + "," + longitude);
         heartbeat.setSpeed(speed);
 
