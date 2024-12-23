@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the packaged application into the container
-COPY target/fleet-management-app.jar app.jar
+COPY target/fleetmanagementapi-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the application port
 EXPOSE 8081

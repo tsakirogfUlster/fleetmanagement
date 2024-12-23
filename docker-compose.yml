@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  fleetmanagementapi:
+    build:
+      context: ./fleetmanagementapi
+    ports:
+      - "8081:8080"  # Map external 8081 to internal 8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2-server:1521/~/fleetmanagementapi
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: ""
+    depends_on:
+      - h2-server
+
+  heartbeater:
+    build:
+      context: heartbeater
+    ports:
+      - "8082:8080"  # Map external 8082 to internal 8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2-server:1521/~/heartbeater
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: ""
+    depends_on:
+      - h2-server
+
+#  microservice-c:
+#    build:
+#      context: ./microservice-c
+#    ports:
+#      - "8083:8080"  # Map external 8083 to internal 8080
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2-server:1521/~/microservice-c
+#      SPRING_DATASOURCE_USERNAME: sa
+#      SPRING_DATASOURCE_PASSWORD: ""
+#    depends_on:
+#      - h2-server
+
+  h2-server:
+    image: oscarfonts/h2
+    ports:
+      - "1521:1521"  # TCP port for microservices
+      - "81:81"      # Web console port
+    environment:
+      H2_OPTIONS: "-tcp -tcpAllowOthers -web -webAllowOthers"
+    volumes:
+      - h2-data:/opt/h2-data
+
+volumes:
+  h2-data:
