@@ -29,7 +29,7 @@ class HeartbeatServiceTest {
     void generateSimulatedHeartbeat_ShouldProduceValidHeartbeat() throws Exception {
         // Arrange: Mock the response from the Fleet Management API
         String mockResponse = "[{\"id\":1,\"licensePlate\":\"ABC123\",\"type\":\"Sedan\",\"driver\":{\"id\":2,\"name\":\"John Doe\",\"penaltyPoints\":0}}]";
-        when(restTemplate.getForObject("http://localhost:8080/fleet/cars", String.class)).thenReturn(mockResponse);
+        when(restTemplate.getForObject("http://localhost:8081/fleet/cars", String.class)).thenReturn(mockResponse);
 
         // Access the private method using reflection
         Method method = HeartbeatService.class.getDeclaredMethod("generateSimulatedHeartbeat");

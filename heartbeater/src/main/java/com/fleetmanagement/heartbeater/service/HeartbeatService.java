@@ -89,7 +89,8 @@ public class HeartbeatService {
     }
 
     private String[] fetchCarAndDriverIds() {
-        final String FLEET_CARS_API = "http://localhost:8080/fleet/cars";
+        // this needs to be updated using config to identify runtime platform and act accodrinally
+        final String FLEET_CARS_API = "http://fleetmanagementapi:8081/fleet/cars";
 
         try {
             // Make a GET request to fetch the cars

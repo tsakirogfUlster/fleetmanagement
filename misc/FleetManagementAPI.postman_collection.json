@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "7efb39df-6674-464c-b469-f0444a2a6c89",
+		"name": "FleetManagementAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2431487"
+	},
+	"item": [
+		{
+			"name": "Get Driver List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "GET /fleet/drivers",
+					"host": [
+						"GET "
+					],
+					"path": [
+						"fleet",
+						"drivers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Driver",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "GET /fleet/drivers",
+					"host": [
+						"GET "
+					],
+					"path": [
+						"fleet",
+						"drivers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Driver 2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "GET /fleet/drivers",
+					"host": [
+						"GET "
+					],
+					"path": [
+						"fleet",
+						"drivers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Car List",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Add Car",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Assign Car",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
