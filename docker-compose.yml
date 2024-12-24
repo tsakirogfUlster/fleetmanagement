@@ -1,45 +1,59 @@
+networks:
+  fleet-network:
+    driver: bridge
+
 services:
   fleetmanagementapi:
     build:
       context: ./fleetmanagementapi
+    networks:
+      - fleet-network
     ports:
       - "8081:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2-server:1521/~/fleetmanagement
-      SPRING_DATASOURCE_USERNAME: sa
-      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-server:5432/fleetmanagement
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
     depends_on:
-      - h2-server
+      - postgres-server
 
   heartbeater:
     build:
       context: ./heartbeater
+    networks:
+      - fleet-network
     ports:
       - "8082:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2-server:1521/~/fleetmanagement
-      SPRING_DATASOURCE_USERNAME: sa
-      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-server:5432/fleetmanagement
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - postgres-server
     deploy:  
       restart_policy:
-        condition: manual
+        condition: no
 
   penaltycalculator:
     build:
       context: ./penaltycalculator
+    networks:
+      - fleet-network
     ports:
       - "8083:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2-server:1521/~/fleetmanagement
-      SPRING_DATASOURCE_USERNAME: sa
-      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-server:5432/fleetmanagement
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
     depends_on:
-      - h2-server
+      - postgres-server
 
   kafka1:
     image: confluentinc/cp-kafka:7.3.2
     hostname: kafka1
     container_name: kafka1
+    networks:
+      - fleet-network
     ports:
       - "9092:9092"
       - "29092:29092"
@@ -65,21 +79,27 @@ services:
     image: confluentinc/cp-zookeeper:7.3.2
     hostname: zoo1
     container_name: zoo1
+    networks:
+      - fleet-network
     ports:
       - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-  h2-server:
-    image: oscarfonts/h2
+  postgres-server:
+    image: postgres:15
+    container_name: postgres-server
+    networks:
+      - fleet-network
     ports:
-      - "1521:1521"
-      - "81:81"
+      - "5432:5432"
     environment:
-      H2_OPTIONS: "-tcp -tcpAllowOthers -web -webAllowOthers"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fleetmanagement
     volumes:
-      - h2-data:/opt/h2-data
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
-  h2-data:
+  postgres-data:
